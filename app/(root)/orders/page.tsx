@@ -29,7 +29,6 @@ const Orders = async ({ searchParams }: SearchParamProps) => {
                 Event Title
               </th>
               <th className="min-w-[150px] py-3 text-left">Buyer</th>
-              <th className="min-w-[150px] py-3 text-left">Email</th>
               <th className="min-w-[100px] py-3 text-left">Created</th>
               <th className="min-w-[100px] py-3 text-right">Amount</th>
             </tr>
