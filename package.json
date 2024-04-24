@@ -20,7 +20,7 @@
     "tsconfig": "*",
     "turbo": "latest"
   },
-  "name": "finpro-nextjs-express-prisma",
+  "name": "mini-project",
   "packageManager": "npm@8.15.0",
   "workspaces": [
     "apps/*",
@@ -28,7 +28,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "npx lint-staged"
+      "commit-msg": "npx --no -- commitlint --edit $HUSKY_GIT_PARAMS"
     }
   }
 }

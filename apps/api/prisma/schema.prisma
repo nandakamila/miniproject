@@ -1,21 +1,248 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// PEMBUATAN MODEL PRISMA, KONEKSI KE MYSQL DI .ENV, DAN MIGRASI 
 generator client {
   provider = "prisma-client-js"
 }
 
+// CEK .ENV 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
+// INISIASI DATA MODEL UBAH SAJA DATANYA SESUAI TAMPILAN
+model Users {
+  id           String         @id @unique @default(uuid())
+  email        String         @unique
+  firstName    String
+  lastName     String
+  password     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  role         UserRoles
+  organizer    Organizers?
+  participant  Participants?
+  RefreshToken RefreshToken[]
+}
+
+enum UserRoles {
+  PARTICIPANT
+  ORGANIZER
+}
+
+model Organizers {
+  id            String        @id @unique @default(uuid())
+  userId        String        @unique
+  business_name String?
+  business_type BusinessType?
+  address       String?
+  about         String?
+  twitter       String?
+  instagram     String?
+  facebook      String?
+  users         Users         @relation(fields: [userId], references: [id])
+  events        Events[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+enum BusinessType {
+  SOLE_OWNERSHIP
+  CORPORATION
+}
+
+model Events {
+  id             String           @id @unique @default(uuid())
+  organizerId    String           @unique
+  name           String
+  categories     CategoriesEvent
+  description    String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  ticketType     TicketType
+  status         Status           @default(ONGOING)
+  favorites      Favorites[]
+  tickets        Tickets[]
+  EventImages    EventImages[]
+  RSVP           RSVP[]
+  EventSchedules EventSchedules[]
+  transaction    Transactions[]
+  Reviews        Reviews[]
+  organizer      Organizers       @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  Promotions     Promotions?
+}
+
+enum Status {
+  ONGOING
+  FINISHED
+  CANCELED
+}
+
+enum TicketType {
+  FREE
+  PAID
+}
+
+enum CategoriesEvent {
+  ART_CULTURES
+  HOBBIES
+  TRAVEL
+  FITNESS_HEALTH
+  SPIRITUALITY
+  SOCIAL
+  CHARITY
+  BUSINESS
+  EDUCATION
+  FOOD_DRINKS
+}
+
+model EventImages {
+  id        String   @id @unique @default(uuid())
+  eventId   String   @unique
+  image     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  event     Events   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
 
-  @@map("samples") // if you want to use snake_case format
+// CONJUNTION TABLE
+model RSVP {
+  id            String       @id @unique @default(uuid())
+  participantId String       @unique
+  eventId       String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  participant   Participants @relation(fields: [participantId], references: [id])
+  event         Events       @relation(fields: [eventId], references: [id])
+}
+
+model EventSchedules {
+  id              String   @id @unique @default(uuid())
+  start           DateTime
+  end             DateTime
+  availableTicket Int
+  location        String
+  eventId         String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  event           Events   @relation(fields: [eventId], references: [id])
+}
+
+model CategoriesTickets {
+  id          String    @id @unique @default(uuid())
+  name        String
+  description String
+  price       Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Tickets     Tickets[]
+}
+
+// CONJUNTION TABLE
+model Tickets {
+  id                 String            @id @unique @default(uuid())
+  eventId            String            @unique
+  categoriesTicketId String
+  event              Events            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  categoriesTickets  CategoriesTickets @relation(fields: [categoriesTicketId], references: [id], onDelete: Cascade)
+}
+
+model Promotions {
+  id      String @id @unique @default(uuid())
+  eventId String @unique
+  event   Events @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  // TOLONG DI ISI
+}
+
+model Reviews {
+  id      String @id @unique @default(uuid())
+  rating  Int
+  review  String
+  eventId String @unique
+  event   Events @relation(fields: [eventId], references: [id])
+}
+
+model Participants {
+  id           String         @id @unique @default(uuid())
+  userId       String         @unique
+  avatar       String?
+  gender       Gender?
+  refferalCode String         @unique
+  location     String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  favorites    Favorites[]
+  coupons      Coupons[]
+  points       Points[]
+  RSVP         RSVP[]
+  transaction  Transactions[]
+  users        Users          @relation(fields: [userId], references: [id])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model Favorites {
+  id            String       @id @unique @default(uuid())
+  eventId       String       @unique
+  participantId String
+  participant   Participants @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  events        Events       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+// REGISTRASI DENGAN REFFERAL +10% DISCOUNT COUPON EXPIRED 3 MONTHS
+model Coupons {
+  id            String         @id @unique @default(uuid())
+  participantId String         @unique
+  coupon        Int
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  expired       DateTime
+  transaction   Transactions[]
+  Participant   Participants   @relation(fields: [participantId], references: [id], onDelete: Cascade)
+}
+
+// JIKA REFFEREAL DIPAKAI DAPAT +10000 POINTS EXPIRED 3 MONTHS
+model Points {
+  id            String         @id @unique @default(uuid())
+  participantId String         @unique
+  point         Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  expired       DateTime
+  transaction   Transactions[]
+  participant   Participants   @relation(fields: [participantId], references: [id], onDelete: Cascade)
+}
+
+model Transactions {
+  id            String            @id @unique @default(uuid())
+  participantId String            @unique
+  eventId       String            @unique
+  price         Int
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  couponId      String?
+  pointId       String?
+  status        statusTransaction @default(NOTPAID)
+  participant   Participants      @relation(fields: [participantId], references: [id])
+  event         Events            @relation(fields: [eventId], references: [id])
+  coupon        Coupons?          @relation(fields: [couponId], references: [id])
+  point         Points?           @relation(fields: [pointId], references: [id])
+}
+
+enum statusTransaction {
+  PAID
+  NOTPAID
+}
+
+// AUTHENTICATION LOGIN MASIH ERROR
+model RefreshToken {
+  id          String   @id @unique @default(uuid())
+  hashedToken String
+  userId      String   @unique
+  user        Users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

@@ -9,8 +9,12 @@ import express, {
 } from 'express';
 import cors from 'cors';
 import { PORT } from './config';
-import { SampleRouter } from './routers/sample.router';
-
+import { authRouter } from './auth/auth.router'
+import { userRouter } from './users/users.router';
+import { transactionRouter } from './transactions/transaction.router';
+import { reviewRouter } from './reviews/review.router';
+import { favoriteRouter } from './favorites/favorite.router';
+import { eventRouter } from './events/routers/event.routers';
 export default class App {
   private app: Express;
 
@@ -51,13 +55,14 @@ export default class App {
   }
 
   private routes(): void {
-    const sampleRouter = new SampleRouter();
 
-    this.app.get('/', (req: Request, res: Response) => {
-      res.send(`Hello, Purwadhika Student !`);
-    });
-
-    this.app.use('/samples', sampleRouter.getRouter());
+    this.app.use('/auth', authRouter);
+    this.app.use('/user', userRouter);
+    this.app.use('/transaction', transactionRouter);
+    this.app.use('/review', reviewRouter);
+    this.app.use('/favorite', favoriteRouter);
+    this.app.use('/event', eventRouter);
+    this.app.use('/auth', authRouter);
   }
 
   public start(): void {
