@@ -55,7 +55,6 @@ export default class App {
   }
 
   private routes(): void {
-
     this.app.use('/auth', authRouter);
     this.app.use('/user', userRouter);
     this.app.use('/transaction', transactionRouter);
@@ -65,8 +64,26 @@ export default class App {
   }
 
   public start(): void {
-    this.app.listen(PORT, () => {
-      console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
+    const net = require('net');
+
+    const server = net.createServer();
+
+    server.on('error', (err: any) => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(`Port ${PORT} is already in use. Retrying in 1 second...`);
+        setTimeout(() => {
+          server.close();
+          server.listen(PORT);
+        }, 1000);
+      } else {
+        console.error(err);
+      }
     });
+
+    server.on('listening', () => {
+      console.log(`Server is listening on port ${PORT}`);
+    });
+
+    server.listen(PORT);
   }
 }
