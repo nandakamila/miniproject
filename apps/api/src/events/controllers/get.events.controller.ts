@@ -1,7 +1,7 @@
 import prisma from '../../prisma';
 import { Response, Request } from 'express';
 import { CategoriesEvent } from '@prisma/client';
-import pagination from 'utils/pagination';
+import pagination from '../../../utils/pagination';
 
 // GET ALL EVENTS OR BY PARAMS
 const getAllEventsByQuery = async (req: Request, res: Response) => {

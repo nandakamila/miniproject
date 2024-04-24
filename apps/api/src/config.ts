@@ -10,7 +10,7 @@ config({ path: resolve(__dirname, `../${envFile}.local`), override: true });
 
 // Load all environment variables from .env file
 
-export const PORT = process.env.PORT || 3001;
+export const PORT = process.env.PORT || 2050;
 export const DATABASE_URL = process.env.DATABASE_URL || '';
 export const JWT_ACCESS = process.env.JWT_ACCESS || '';
 export const JWT_REFRESH = process.env.JWT_REFRESH || '';

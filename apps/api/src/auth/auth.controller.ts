@@ -1,6 +1,6 @@
 
 import prisma from "../prisma";
-import { generateHashToken } from "utils/auth";
+import { generateHashToken } from "../../utils/auth";
 
 export async function addRefreshToken(jtId: string, refreshToken: string, userId: string) {
     try {

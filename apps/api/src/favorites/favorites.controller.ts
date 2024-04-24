@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma';
-import pagination from 'utils/pagination';
+import pagination from '../../utils/pagination';
 
 // CREATE FAVORITE
 const addFavorite = async (req: Request, res: Response) => {

@@ -1,6 +1,6 @@
-import prisma from "@/prisma";
+import prisma from "../prisma";
 import { Request, Response } from "express";
-import pagination from "utils/pagination";
+import pagination from "../../utils/pagination";
 
 // CREATE REVIEW
 const addReview = async (req: Request, res: Response) => {
@@ -142,4 +142,4 @@ const deleteReview = async (req: Request, res: Response) => {
     }
 };
 
-export default { addReview, getAllReviews, updateReview, deleteReview }
+export default { addReview, getAllReviews, updateReview, deleteReview };

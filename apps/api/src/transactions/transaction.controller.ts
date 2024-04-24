@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma';
-import pagination from 'utils/pagination';
+import pagination from '../../utils/pagination';
 
 const addTransaction = async (req: Request, res: Response) => {
   try {

@@ -1,5 +1,5 @@
 import express from 'express'
-import { findRefreshTokenById, deleteRefreshToken, revokeRefreshTokens } from "../auth/auth.controller";
+import { findRefreshTokenById, deleteRefreshToken, revokeRefreshTokens } from "./auth.controller";
 
 
 const router = express.Router();

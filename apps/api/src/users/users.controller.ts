@@ -4,8 +4,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
-import { generateHashPassword, generateHashToken, generateJwtToken } from 'utils/auth';
-import { generateRefferal } from 'utils/refferalCode';
+import { generateHashPassword, generateHashToken, generateJwtToken } from '../../utils/auth';
+import { generateRefferal } from '../../utils/refferalCode';
 
 import { addRefreshToken, deleteRefreshToken, findRefreshTokenById, revokeRefreshTokens } from '../auth/auth.controller';
 import { JWT_REFRESH } from '../config';
@@ -172,7 +172,7 @@ const revokeRefreshToken = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-// UPDATE DATA 
+// UPDATE DATA
 const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
