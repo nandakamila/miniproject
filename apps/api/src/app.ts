@@ -15,8 +15,8 @@ import { reviewRouter } from './reviews/review.router';
 import { favoriteRouter } from './favorites/favorite.router';
 import { eventRouter } from './events/routers/event.routers';
 
-export default class App {
-  private app: Express;
+export class App {
+  app: Express;
 
   constructor() {
     this.app = express();
@@ -25,13 +25,13 @@ export default class App {
     this.handleError();
   }
 
-  private configure(): void {
+  configure(): void {
     this.app.use(cors());
     this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
   }
 
-  private handleError(): void {
+  handleError(): void {
     // not found
     this.app.use((req: Request, res: Response, next: NextFunction) => {
       if (req.path.includes('/api/')) {
@@ -54,7 +54,7 @@ export default class App {
     );
   }
 
-  private routes(): void {
+  routes(): void {
     this.app.use('/auth', authRouter);
     this.app.use('/user', userRouter);
     this.app.use('/transaction', transactionRouter);
@@ -63,27 +63,10 @@ export default class App {
     this.app.use('/event', eventRouter);
   }
 
-  public start(): void {
-    const net = require('net');
-
-    const server = net.createServer();
-
-    server.on('error', (err: any) => {
-      if (err.code === 'EADDRINUSE') {
-        console.log(`Port ${PORT} is already in use. Retrying in 1 second...`);
-        setTimeout(() => {
-          server.close();
-          server.listen(PORT);
-        }, 1000);
-      } else {
-        console.error(err);
-      }
+  start(): void {
+    this.app.listen(PORT, () => {
+      console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
     });
-
-    server.on('listening', () => {
-      console.log(`Server is listening on port ${PORT}`);
-    });
-
-    server.listen(PORT);
   }
 }
+
