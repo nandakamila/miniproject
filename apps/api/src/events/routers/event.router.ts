@@ -4,13 +4,10 @@ import postEventsController from '../controllers/post.events.controller';
 import getEventsController from '../controllers/get.events.controller';
 import deleteEventsController from '../controllers/delete.events.controller';
 import patchEventsController from '../controllers/patch.events.controller'
+
 const router = express.Router();
 
-// ROUTER MASIH BELUM YA YG METHOD POST /PATCH EVENT
-router.post('/event', postEventsController.createEvent);
-// router.post('/:id', postEventsController.createEventImages);
-// router.post('/schedule', postEventsController.createEventSchedule);
-// router.post('/categories', postEventsController.createCategoriesTicket);
+router.post('/', postEventsController.createEvent);
 
 router.get('/search', getEventsController.getAllEventsByQuery);
 router.get('/category', getEventsController.getEventsByCategory);

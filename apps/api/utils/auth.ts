@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import prisma from "../src/prisma";
 import jwt from "jsonwebtoken";
 import { JWT_ACCESS, JWT_REFRESH } from '../src/config';
 
@@ -40,3 +41,11 @@ export const decodeJwtToken = (token: string): string => {
     const { userId } = jwt.verify(token, JWT_ACCESS) as { userId: string };
     return userId;
 };
+
+export const findUserById = async (id: string) => {
+    return await prisma.users.findUnique({ where: { id } });
+}
+
+export const findUserByEmail = async (email: string) => {
+    return await prisma.users.findUnique({ where: { email } });
+}

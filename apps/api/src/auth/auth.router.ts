@@ -5,7 +5,7 @@ import { findRefreshTokenById, deleteRefreshToken, revokeRefreshTokens } from ".
 const router = express.Router();
 
 router.get('/:id', findRefreshTokenById);
-router.delete('/:id', deleteRefreshToken);
 router.post('/revoke', revokeRefreshTokens);
+router.delete('/:id', deleteRefreshToken);
 
 export { router as authRouter }

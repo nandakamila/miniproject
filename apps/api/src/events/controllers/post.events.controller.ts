@@ -81,6 +81,8 @@ const createCategoriesTicket = async (name: string, description: string, price: 
 };
 
 export default {
-    createEvent, createCategoriesTicket, createEventImages, createEventSchedule,
-
+    createEvent,
+    createCategoriesTicket,
+    createEventImages,
+    createEventSchedule,
 }

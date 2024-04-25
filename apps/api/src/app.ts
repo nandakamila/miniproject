@@ -13,7 +13,7 @@ import { userRouter } from './users/users.router';
 import { transactionRouter } from './transactions/transaction.router';
 import { reviewRouter } from './reviews/review.router';
 import { favoriteRouter } from './favorites/favorite.router';
-import { eventRouter } from './events/routers/event.routers';
+import { eventRouter } from './events/routers/event.router';
 
 export class App {
   app: Express;
