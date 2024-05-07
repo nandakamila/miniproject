@@ -8,7 +8,7 @@ import { auth } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 
-const ProfilePage = async ({ searchParams }: SearchParamProps) => {
+const DashboardPage = async ({ searchParams }: SearchParamProps) => {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
@@ -71,4 +71,4 @@ const ProfilePage = async ({ searchParams }: SearchParamProps) => {
   );
 };
 
-export default ProfilePage;
+export default DashboardPage;
